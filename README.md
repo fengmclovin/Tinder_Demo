@@ -31,4 +31,4 @@ This is a Tinder-like web application developed using Django, Python, and JavaSc
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/django-tinder-like-app.git
+   git clone https://github.com/fengmclovin/Tinder_Demo.git
