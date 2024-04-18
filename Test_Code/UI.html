@@ -1,0 +1,28 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinder-like App</title>
+    <!-- Add CSS stylesheets here -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div id="profile-container">
+        {% for user in users %}
+            <div class="profile-card" data-user-id="{{ user.id }}">
+                <img src="{{ user.image.url }}" alt="{{ user.name }}">
+                <h3>{{ user.name }}</h3>
+                <p>Age: {{ user.age }}, Location: {{ user.location }}</p>
+                <button class="swipe-left">Swipe Left</button>
+                <button class="swipe-right">Swipe Right</button>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Add JavaScript code here -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
