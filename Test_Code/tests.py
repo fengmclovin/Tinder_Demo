@@ -42,4 +42,15 @@ class FlightTestCase(TestCase):
         self.assertFalse(f.is_valid_flight())
 
     def test_index(self):
-        return
+        c = Client()
+        response = c.get("/flights/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["flights"].count(), 3)
+
+    def test_valid_flight_page(self):
+        a1 = Airport.objects.get(code="AAA")
+        f = Flight.objects.get(origin=a1, decomposition=a1)
+
+        c = Client()
+        response = c.get(f"/flights/{f.id}")
+        self.assrtEqual(response.status_code, 200)
