@@ -1,5 +1,6 @@
 from django.test import Client, TestCase
 
+from django.db.models import Max  # select max
 from .models import Airport, Flight, Passenger
 
 # Create your tests here.
@@ -54,3 +55,29 @@ class FlightTestCase(TestCase):
         c = Client()
         response = c.get(f"/flights/{f.id}")
         self.assrtEqual(response.status_code, 200)
+
+    def test_invalid_flight_page(self):
+        max_id = Flight.objects.all().aggregate(Max("id"))["id__max"]
+
+        c = Client()
+        response = c.get(f"/flights/{max_id + 1}")
+        self.assertEqual(response.status_code, 404)
+
+    def test_flight_page_passenger(self):
+        f = Flight.objects.get(pk=1)
+        p = Passenger.objects.create(first="Alice", last="Adams")
+        f.passengers.add(p)
+
+        c = Client()
+        response = c.get(f"/flights/{f.id}")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["passengers"].count(), 1)
+
+    def test_flight_page_non_passengets(self):
+        f = Flight.objects.get(pk=1)
+        p = Passenger.objects.create(first="Alice", last="Adam")
+
+        c = Client()
+        response = c.get(f"/flights/{f.id}")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["non_passengers"].count(), 1)
